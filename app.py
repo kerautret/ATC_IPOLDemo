@@ -123,8 +123,8 @@ class app(base_app):
         
         # save and validate the parameters
         try:
-            self.cfg['param']['tmin'] =  float(kwargs['tmin']
-            self.cfg['param']['tmax'] =  float(kwargs['tmax']
+            self.cfg['param']['tmin'] =  float(kwargs['tmin'])
+            self.cfg['param']['tmax'] =  float(kwargs['tmax'])
             self.cfg['param']['m'] =  float(kwargs['m'])
 
         except ValueError:
