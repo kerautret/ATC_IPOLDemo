@@ -231,7 +231,7 @@ class app(base_app):
                               comp = ' > inputPolygon.sdp')
 
         f.close()
-
+        fInfo.close()
 
 
         ##  -------
@@ -251,9 +251,10 @@ class app(base_app):
         ## ---------
         ## process 4: converting to output result
         ## ---------
+        fInfo = open(self.work_dir+"algoLog.txt", "a")
         command_args = ['convert.sh', '-background', '#FFFFFF', '-flatten', \
                         'inputPolygonATC_Step4.eps', 'output.png']
-        self.runCommand(command_args)
+        self.runCommand(command_args, None, fInfo)
 
         ## ----
         ## Final step: save command line
