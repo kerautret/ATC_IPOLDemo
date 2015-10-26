@@ -16,7 +16,7 @@ import time
 class app(base_app):
     """ template demo app """
 
-    title = "Knot Detection from Accumulation Map by Polar Scan: Online Demonstration"
+    title = "Adaptive Tangential Cover for Noisy Digital Contours: Online Demonstration"
     xlink_article = 'http://www.ipol.im/'
     xlink_src = 'http://www.ipol.im/pub/pre/67/gjknd_1.1.tgz'
     dgtal_src = 'https://github.com/kerautret/DGtal.git'
