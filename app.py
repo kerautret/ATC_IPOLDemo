@@ -120,12 +120,13 @@ class app(base_app):
         """
         params handling and run redirection
         """
-
+        
         # save and validate the parameters
         try:
-            self.cfg['param'] = {'tmin' : float(kwargs['tmin']),
-                                 'tmax' : float(kwargs['tmax']),
-                                 'm' : float(kwargs['m'])}
+            self.cfg['param']['tmin'] =  float(kwargs['tmin']
+            self.cfg['param']['tmax'] =  float(kwargs['tmax']
+            self.cfg['param']['m'] =  float(kwargs['m']
+            
         except ValueError:
             return self.error(errcode='badparams',
                               errmsg="The parameters must be numeric.")
