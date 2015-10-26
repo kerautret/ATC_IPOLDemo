@@ -245,7 +245,7 @@ class app(base_app):
                        ['-e']
         f = open(self.work_dir+"algoLog.txt", "a")
         cmd = self.runCommand(command_args, None, f)
-       
+        f.close()
 
 
         ## ---------
