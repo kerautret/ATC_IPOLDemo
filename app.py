@@ -19,7 +19,7 @@ class app(base_app):
     xlink_src =  'http://dev.ipol.im/~kerautre/CodeExecutableDemos/' + \
                  'FrechetAndConnectedCompDemo.tgz'
     demo_src_filename  = 'FrechetAndConnectedCompDemo.tgz'
-    demo_src_dir  = 'FrechetAndConnectedCompDemo'
+    demo_src_dir  = 'ATC_IPOLDemo'
 
     input_nb = 1 # number of input images
     input_max_pixels = 500000 # max size (in pixels) of an input image
@@ -126,7 +126,7 @@ class app(base_app):
             self.cfg['param']['tmin'] =  float(kwargs['tmin'])
             self.cfg['param']['tmax'] =  float(kwargs['tmax'])
             self.cfg['param']['m'] =  float(kwargs['m'])
-
+            self.cfg.save()
         except ValueError:
             return self.error(errcode='badparams',
                               errmsg="The parameters must be numeric.")
