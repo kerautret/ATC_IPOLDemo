@@ -230,17 +230,8 @@ class app(base_app):
         cmd = self.runCommand(command_args, f, fInfo, \
                               comp = ' > inputPolygon.sdp')
 
+        f.close()
 
-        
-        index = 0
-        f.close()
-        f = open(self.work_dir+"inputPolygon.txt", "r")
-        line = f.read()
-        contoursList.write(line+"\n")
-        
-        contoursList.close()
-        f.close()
-        shutil.copy(self.work_dir+'tmp.dat', self.work_dir+'inputPolygon.txt')
 
 
         ##  -------
@@ -249,7 +240,7 @@ class app(base_app):
         inputWidth = image(self.work_dir + 'input_0.png').size[0]
         inputHeight = image(self.work_dir + 'input_0.png').size[1]
         command_args = ['testCircleDecomposition'] + \
-                       [ '-i', 'inputPolygon.txt', '-d', self.src_dir + os.path.join(ImaGene-forIPOL)] + \
+                       [ '-i', 'inputPolygon.sdp', '-d', self.src_dir + os.path.join(ImaGene-forIPOL)] + \
                        ['-e']
         f = open(self.work_dir+"algoLog.txt", "a")
         cmd = self.runCommand(command_args)
