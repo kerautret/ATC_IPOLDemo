@@ -120,18 +120,12 @@ class app(base_app):
         """
         params handling and run redirection
         """
-        if 'w' in kwargs:
-            x = True
-        else:
-            x = False
 
         # save and validate the parameters
         try:
             self.cfg['param'] = {'tmin' : float(kwargs['tmin']),
                                  'tmax' : float(kwargs['tmax']),
-                                 'm' : float(kwargs['m']),
-                                 'e' : float(kwargs['e']),
-                                 'w': bool(x)}
+                                 'm' : float(kwargs['m'])}
         except ValueError:
             return self.error(errcode='badparams',
                               errmsg="The parameters must be numeric.")
@@ -145,9 +139,6 @@ class app(base_app):
         """
         algo execution
         """
-
-        m = self.cfg['param']['m']
-        e = self.cfg['param']['e']
 
         # run the algorithm
         self.list_commands = ""
@@ -174,8 +165,7 @@ class app(base_app):
             ar.add_file("inputPolygon.txt", info="input polygons")
             ar.add_file("outputPolygon.txt", info="output polygons")
             ar.add_info({"tmin": self.cfg['param']['tmin'],
-            			 "tmax": self.cfg['param']['tmax'], "m": m, "e": e, \
-                        "width only": self.cfg['param']['w']})
+                         "tmax": self.cfg['param']['tmax'], "m": m})
             ar.save()
 
         return self.tmpl_out("run.html")
@@ -198,13 +188,13 @@ class app(base_app):
         ## ---------
         f = open(self.work_dir+"inputPolygon.txt", "w")
         fInfo = open(self.work_dir+"algoLog.txt", "w")
-        command_args = ['pgm2freeman']+\
-				       ['-min_size', str(self.cfg['param']['m']), '-image',\
-				        'inputNG.pgm']+\
-        			   ['-outputSDPAll' ]
+        command_args = ['img2freeman']+\
+                       ['--minSize', str(self.cfg['param']['m']), '-i',\
+                        'inputNG.pgm']+\
+                       
         if not self.cfg['param']['autothreshold']:
-            command_args += ['-maxThreshold', str(self.cfg['param']['tmax'])]+ \
-           					['-minThreshold', str(self.cfg['param']['tmin'])]
+            command_args += ['-M', str(self.cfg['param']['tmax'])]+ \
+           					['-m', str(self.cfg['param']['tmin'])]
 
         cmd = self.runCommand(command_args, f, fInfo, \
                               comp = ' > inputPolygon.txt')
@@ -222,19 +212,17 @@ class app(base_app):
 
         contoursList = open (self.work_dir+"tmp.dat", "w")
         contoursList.write("# Polygon contour obtained from the pgm2freeman"+\
-        					" program with the following options: \n"+\
-       						"# "+ cmd + "\n"+\
-       					   "# Each line corresponds to an resulting polygon. "+\
-        	               "All vertices (xi yi) are given in the same line: "+\
-        	               " x0 y0 x1 y1 ... xn yn \n")
+                           " program with the following options: \n"+\
+                           "# "+ cmd + "\n"+\
+                           "# Each line corresponds to an resulting polygon. "+\
+                           "All vertices (xi yi) are given in the same line: "+\
+                           " x0 y0 x1 y1 ... xn yn \n")
         index = 0
         f.close()
         f = open(self.work_dir+"inputPolygon.txt", "r")
-
-        for contour in f:
-            contoursList.write("# contour number: "+ str(index) + "\n")
-            contoursList.write(contour+"\n")
-            index = index + 1
+        line = f.read()
+        contoursList.write(line+"\n")
+        
         contoursList.close()
         f.close()
         shutil.copy(self.work_dir+'tmp.dat', self.work_dir+'inputPolygon.txt')
@@ -245,34 +233,13 @@ class app(base_app):
         ## ---------
         inputWidth = image(self.work_dir + 'input_0.png').size[0]
         inputHeight = image(self.work_dir + 'input_0.png').size[1]
-        command_args = ['frechetSimplification'] + \
-                       ['-imageSize', str(inputWidth), str(inputHeight)] + \
-                       ['-error', str(self.cfg['param']['e']), '-sdp',
-                        'inputPolygon.txt' ]+\
-                       ['-allContours']
+        command_args = ['testCircleDecomposition'] + \
+                       [ '-i', 'inputPolygon.txt', '-d', self.src_dir + os.path.join(ImaGene-forIPOL)] + \
+                       ['-e']
         f = open(self.work_dir+"algoLog.txt", "a")
-        if self.cfg['param']['w']:
-            command_args += ['-w']
 
         cmd = self.runCommand(command_args)
-        contoursList = open (self.work_dir+"tmp.dat", "w")
-        contoursList.write("# Set of resulting polygons obtained from the " +\
-        		            "frechetSimplification algorithm. \n"+\
-        		            "# Each line corresponds to an resulting polygon."+\
-        					" All vertices (xi yi) are given in the same line:"+
-        					"  x0 y0 x1 y1 ... xn yn \n"+\
-        					"# Command to reproduce the result of the "+\
-				        	"algorithm:\n")
-        contoursList.write("#"+ cmd+'\n')
-        f = open (self.work_dir+"output.txt", "r")
-        index = 0
-        for line in f:
-            contoursList.write("# contour number: "+ str(index) + "\n")
-            contoursList.write(line+"\n")
-            index = index +1
-        contoursList.close()
-        f.close()
-        shutil.copy(self.work_dir+'tmp.dat', self.work_dir+'outputPolygon.txt')
+       
 
 
         ## ---------
