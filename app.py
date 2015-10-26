@@ -240,7 +240,8 @@ class app(base_app):
         inputWidth = image(self.work_dir + 'input_0.png').size[0]
         inputHeight = image(self.work_dir + 'input_0.png').size[1]
         command_args = ['testCircleDecomposition'] + \
-                       [ '-i', 'inputPolygon.sdp', '-d', self.src_dir + os.path.join('ImaGene-forIPOL')] + \
+                       [ '-i', 'inputPolygon.sdp', '-d', self.base_dir + \
+                         os.path.join('srcManual') + os.path.join('ImaGene-forIPOL')] + \
                        ['-e']
         f = open(self.work_dir+"algoLog.txt", "a")
         cmd = self.runCommand(command_args, None, f)
