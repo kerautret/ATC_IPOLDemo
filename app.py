@@ -189,8 +189,8 @@ class app(base_app):
         f = open(self.work_dir+"inputPolygon.txt", "w")
         fInfo = open(self.work_dir+"algoLog.txt", "w")
         command_args = ['img2freeman']+\
-                       ['--minSize', str(self.cfg['param']['m']), '-i',\
-                        'inputNG.pgm']
+                       ['--minSize', str(100)]+\
+                       [ '-i', 'inputNG.pgm']
                        
         if not self.cfg['param']['autothreshold']:
             command_args += ['-M', str(self.cfg['param']['tmax'])]+ \
@@ -237,7 +237,6 @@ class app(base_app):
                        [ '-i', 'inputPolygon.txt', '-d', self.src_dir + os.path.join(ImaGene-forIPOL)] + \
                        ['-e']
         f = open(self.work_dir+"algoLog.txt", "a")
-
         cmd = self.runCommand(command_args)
        
 
