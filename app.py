@@ -252,7 +252,7 @@ class app(base_app):
         ## process 4: converting to output result
         ## ---------
         command_args = ['convert.sh', '-background', '#FFFFFF', '-flatten', \
-                        'output.eps', 'output.png']
+                        'inputPolygonATC_Step4.eps', 'output.png']
         self.runCommand(command_args)
 
         ## ----
