@@ -130,6 +130,7 @@ class app(base_app):
             return self.error(errcode='badparams',
                               errmsg="The parameters must be numeric.")
         self.cfg['param']['autothreshold'] =  kwargs['thresholdtype'] == 'True'
+        self.cfg.save()
         http.refresh(self.base_url + 'run?key=%s' % self.key)
         return self.tmpl_out("wait.html")
 
