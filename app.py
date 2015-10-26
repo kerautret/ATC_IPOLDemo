@@ -195,7 +195,7 @@ class app(base_app):
         fInfo = open(self.work_dir+"algoLog.txt", "w")
         command_args = ['img2freeman']+\
                        ['--minSize', str(self.cfg['param']['m'])]+\
-                       [ '-i', 'inputNG.pgm']
+                       ['--sort', '-i', 'inputNG.pgm']
                        
         if not self.cfg['param']['autothreshold']:
             command_args += ['-M', str(self.cfg['param']['tmax'])]+ \
