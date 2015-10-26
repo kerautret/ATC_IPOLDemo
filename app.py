@@ -270,18 +270,65 @@ class app(base_app):
                                           + 'resu.png').size[1])
 
 
+   @cherrypy.expose
+    @init_app
+    def result(self, public=None):
+        """
+        display the algo results
+        """
+        resultHeight = image(self.work_dir + 'input_0.png').size[1]
+        imageHeightResized = min (600, resultHeight)
+        resultHeight = max(300, resultHeight)
+        return self.tmpl_out("result.html", height=resultHeight, \
+        					 heightImageDisplay=imageHeightResized)
 
-    def runCommand(self, command, stdOut=None, stdErr=None):
+
+    def runCommand(self, command, stdOut=None, stdErr=None, comp=None):
         """
         Run command and update the attribute list_commands
         """
         p = self.run_proc(command, stderr=stdErr, stdout=stdOut, \
         				  env={'LD_LIBRARY_PATH' : self.bin_dir})
         self.wait_proc(p, timeout=self.timeout)
+        index = 0
         # transform convert.sh in it classic prog command (equivalent)
-        # command_to_save = ' '.join(['"' + arg + '"' if ' ' in arg else arg
-        #          for arg in command ])
-        #if comp is not None:
-        #    command_to_save += comp
-        #self.list_commands +=  command_to_save + '\n'
-        #sreturn command_to_save
+        for arg in command:
+            if arg == "convert.sh" :
+                command[index] = "convert"
+            index = index + 1
+        command_to_save = ' '.join(['"' + arg + '"' if ' ' in arg else arg
+                 for arg in command ])
+        if comp is not None:
+            command_to_save += comp
+        self.list_commands +=  command_to_save + '\n'
+        return command_to_save
+
+    def make_archive(self):
+        """
+        create an archive bucket HACK!
+        This overloaded verion of the empty_app function
+        first deletes the entry and its directory so that the 
+        new one is correcly stored.
+        """
+        # First delete the key from the archive if it exist
+        from lib import archive
+        archive.index_delete(self.archive_index, self.key)
+        entrydir = self.archive_dir + archive.key2url(self.key)
+        if os.path.isdir(entrydir):
+            shutil.rmtree(entrydir)
+
+        # Then insert the new data
+        ar = archive.bucket(path=self.archive_dir,
+                            cwd=self.work_dir,
+                            key=self.key)
+        ar.cfg['meta']['public'] = self.cfg['meta']['public']
+
+        def hook_index():
+            """
+            create an archive bucket
+            """
+            return archive.index_add(self.archive_index,
+                                     bucket=ar,
+                                     path=self.archive_dir)
+        ar.hook['post-save'] = hook_index
+        return ar
