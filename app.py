@@ -189,7 +189,7 @@ class app(base_app):
         f = open(self.work_dir+"inputPolygon.txt", "w")
         fInfo = open(self.work_dir+"algoLog.txt", "w")
         command_args = ['img2freeman']+\
-                       ['--minSize', str(100)]+\
+                       ['--minSize', str(self.cfg['param']['m'])]+\
                        [ '-i', 'inputNG.pgm']
                        
         if not self.cfg['param']['autothreshold']:

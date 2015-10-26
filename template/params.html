@@ -12,6 +12,9 @@
   Frechet algorithm.
   <br/>
 
+  <b>More important</b> you can set the parameter associated to the
+  simplification algorithm <font color=red> <i>e</i> </font> (used in the Fr&eacute;chet or
+  width based algorithm) and <font color=red> <i>w</i></font> to apply the width based algorithm.
 
 </p>
 
@@ -85,7 +88,34 @@ $(document).ready(function() {
 <!-- end of code for slider -->
 
 </li>
-        </ul> 
+     </ul> </li>
+
+      <li> Step 2: set the algorithm parameters
+
+   <ul>
+     <li>
+<!-- code for slider -->
+<div style="float:left;padding-right:25px">
+<label for="e">maximal error <font color="red"> <i>e </i></font>:</label>
+ <input type="text" style="font-family:monospace;text-align:right"
+    size="4" id="e" name="e" value="1.0" />
+</div>
+<div id="e_slider" name="e_slider" style="width:280px;float:left;margin-top:4px;font-size:10pt"></div>
+<script type="text/javascript">
+// Turn DIV slider into a slider linked to scale
+$(document).ready(function() {
+      createLinkedSlider('#e', '#e_slider', 0, 100, 0.5);
+});
+</script>
+<div style="clear:both"> </div>
+<!-- end of code for slider -->
+
+</li>
+     <li>
+    Use width only <font color="red">w</font>: <input type="checkbox" name="w" value="on" size="4" />
+    </li>
+</ul>
+</li>
     <input type="submit" value="run" />
   </div>
 </form>
