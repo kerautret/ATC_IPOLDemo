@@ -29,6 +29,13 @@ class app(base_app):
     is_test = True       # switch to False for deployment
     list_commands = ""
 
+    def input_select_callback(self, fnames):
+        '''
+        Implement the callback for the input select to
+        process the non-standard input
+        '''         
+        self.cfg.save()
+
 
     def __init__(self):
         """
@@ -126,12 +133,13 @@ class app(base_app):
             self.cfg['param']['tmin'] =  float(kwargs['tmin'])
             self.cfg['param']['tmax'] =  float(kwargs['tmax'])
             self.cfg['param']['m'] =  float(kwargs['m'])
+            self.cfg['param']['autothreshold'] =  kwargs['thresholdtype'] == 'True'
             self.cfg.save()
         except ValueError:
             return self.error(errcode='badparams',
                               errmsg="The parameters must be numeric.")
-        self.cfg['param']['autothreshold'] =  kwargs['thresholdtype'] == 'True'
-        self.cfg.save()
+
+
         http.refresh(self.base_url + 'run?key=%s' % self.key)
         return self.tmpl_out("wait.html")
 
