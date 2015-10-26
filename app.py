@@ -270,7 +270,7 @@ class app(base_app):
                                           + 'resu.png').size[1])
 
 
-   @cherrypy.expose
+    @cherrypy.expose
     @init_app
     def result(self, public=None):
         """
