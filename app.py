@@ -215,13 +215,23 @@ class app(base_app):
             line_cases = lines[0].replace(")", " ").split()
             self.cfg['param']['tmax'] = int(line_cases[17])
 
-        contoursList = open (self.work_dir+"tmp.dat", "w")
-        contoursList.write("# Polygon contour obtained from the pgm2freeman"+\
-                           " program with the following options: \n"+\
-                           "# "+ cmd + "\n"+\
-                           "# Each line corresponds to an resulting polygon. "+\
-                           "All vertices (xi yi) are given in the same line: "+\
-                           " x0 y0 x1 y1 ... xn yn \n")
+        singleContour = open(self.work_dir+"singleContour.fc", 'w')
+        f = open(self.work_dir+"inputPolygon.txt", "r")
+        line = f.read()
+        singleContour.write(line+"\n")
+        singleContour.close()
+        
+        f = open(self.work_dir+"inputPolygon.sdp", "w")
+        fInfo = open(self.work_dir+"algoLog.txt", "a")
+        command_args = ['freeman2sdp']+\
+                       ['-f', 'singleContour.fc']
+                       
+        
+        cmd = self.runCommand(command_args, f, fInfo, \
+                              comp = ' > inputPolygon.sdp')
+
+
+        
         index = 0
         f.close()
         f = open(self.work_dir+"inputPolygon.txt", "r")
