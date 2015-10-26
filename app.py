@@ -31,6 +31,8 @@ class app(base_app):
     input_ext = '.png'   # input image expected extension (ie file format)
     is_test = False       # switch to False for deployment
     commands = []
+    list_commands = ""
+
     def __init__(self):
         """
         app setup
@@ -137,6 +139,7 @@ class app(base_app):
         """
         algo execution
         """
+        self.list_commands = ""
 
 
         try:
