@@ -125,7 +125,7 @@ class app(base_app):
         try:
             self.cfg['param']['tmin'] =  float(kwargs['tmin']
             self.cfg['param']['tmax'] =  float(kwargs['tmax']
-            self.cfg['param']['m'] =  float(kwargs['m']
+            self.cfg['param']['m'] =  float(kwargs['m'])
             
         except ValueError:
             return self.error(errcode='badparams',
