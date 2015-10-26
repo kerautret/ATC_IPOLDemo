@@ -119,9 +119,9 @@ class app(base_app):
         # save and validate the parameters
         try:
             self.cfg['param']['m'] = kwargs['m']
-            self.cfg['param']['rmin'] = kwargs['rmin']
-            self.cfg['param']['rmax'] = kwargs['rmax']
-            self.cfg['param']['minsize'] = kwargs['minsize']
+            self.cfg['param']['tmin'] = kwargs['tmin']
+            self.cfg['param']['tmax'] = kwargs['tmax']
+            self.cfg['param']['autothreshold'] =  kwargs['thresholdtype'] == 'True'
 
             self.cfg.save()
         except ValueError:
