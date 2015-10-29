@@ -162,8 +162,8 @@ class app(base_app):
             ar.add_file("input_0.png", "original.png", info="uploaded")
             ar.add_file("algoLog.txt", info="algoLog.txt")
             ar.add_file("commands.txt", info="commands.txt")
-            ar.add_file("outputATC.png", info="outputATC.png", info("out ATC")
-            ar.add_file("outputPolygon.png", info="outputPolygon.png", info("out polygon")
+            ar.add_file("outputATC.png", "outputATC.png", info="outputATC.png")
+            ar.add_file("outputPolygon.png", "outputPolygon.png", info="outputPolygon.png")
             ar.save()
 
         return self.tmpl_out("run.html")
