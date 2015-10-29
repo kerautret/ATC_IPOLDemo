@@ -252,8 +252,14 @@ class app(base_app):
         ## ---------
         fInfo = open(self.work_dir+"algoLog.txt", "a")
         command_args = ['convert.sh', '-background', '#FFFFFF', '-flatten', \
-                        'inputPolygonATC_Step4.eps', 'output.png']
+                        'inputPolygonATC_Step4.eps', 'outputATC.png']
         self.runCommand(command_args, None, fInfo)
+        ## ---------
+        fInfo = open(self.work_dir+"algoLog.txt", "a")
+        command_args = ['convert.sh', '-background', '#FFFFFF', '-flatten', \
+                        'inputPolygonATC_DPnew.eps', 'outputPolygon.png']
+        self.runCommand(command_args, None, fInfo)
+
 
         ## ----
         ## Final step: save command line
@@ -264,15 +270,6 @@ class app(base_app):
         return
 
 
-    @cherrypy.expose
-    @init_app
-    def result(self, public=None):
-        """
-        display the algo results
-        """
-        return self.tmpl_out("result.html",
-                             height=image(self.work_dir
-                                          + 'resu.png').size[1])
 
 
     @cherrypy.expose
