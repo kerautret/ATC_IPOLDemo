@@ -160,7 +160,7 @@ class app(base_app):
         if self.cfg['meta']['original']:
             ar = self.make_archive()
             ar.add_file("input_0.png", "original.png", info="uploaded")
-            ar.add_file("output.txt", info="output.txt")
+            ar.add_file("algoLog.txt", info="algoLog.txt")
             ar.add_file("commands.txt", info="commands.txt")
 
 
