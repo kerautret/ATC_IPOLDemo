@@ -243,7 +243,7 @@ class app(base_app):
                        [ '-i', 'inputPolygon.sdp', '-d', self.base_dir + \
                          os.path.join('srcManual/') + os.path.join('ImaGene-forIPOL')] + \
                        ['-e'] + ['--sourceImageWidth', str(inputWidth)]+ \
-                       ['--sourceImageHeight', str(inputHeight)]+
+                       ['--sourceImageHeight', str(inputHeight)]
         f = open(self.work_dir+"algoLog.txt", "a")
         cmd = self.runCommand(command_args, None, f)
         f.close()
