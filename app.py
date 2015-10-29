@@ -156,17 +156,16 @@ class app(base_app):
 
         http.redir_303(self.base_url + 'result?key=%s' % self.key)
 
-        # # archive
-        # if self.cfg['meta']['original']:
-        #     ar = self.make_archive()
-        #     ar.add_file("input_0.png", "original.png", info="uploaded")
-        #     ar.add_file("output.txt", info="output.txt")
-        #     ar.add_file("commands.txt", info="commands.txt")
-        #     ar.add_file(typeprimitive+"_out_input_0.png", info="output")
-        #     ar.add_info({"type primitive": typeprimitive})
-        #     ar.add_info({"use black background": b})
+        # archive
+        if self.cfg['meta']['original']:
+            ar = self.make_archive()
+            ar.add_file("input_0.png", "original.png", info="uploaded")
+            ar.add_file("output.txt", info="output.txt")
+            ar.add_file("commands.txt", info="commands.txt")
+            ar.add_file(typeprimitive+"_out_input_0.png", info="output")
 
-        #     ar.save()
+
+            ar.save()
 
         return self.tmpl_out("run.html")
 
@@ -310,32 +309,32 @@ class app(base_app):
         self.list_commands +=  command_to_save + '\n'
         return command_to_save
 
-    def make_archive(self):
-        """
-        create an archive bucket HACK!
-        This overloaded verion of the empty_app function
-        first deletes the entry and its directory so that the 
-        new one is correcly stored.
-        """
-        # First delete the key from the archive if it exist
-        from lib import archive
-        archive.index_delete(self.archive_index, self.key)
-        entrydir = self.archive_dir + archive.key2url(self.key)
-        if os.path.isdir(entrydir):
-            shutil.rmtree(entrydir)
+    # def make_archive(self):
+    #     """
+    #     create an archive bucket HACK!
+    #     This overloaded verion of the empty_app function
+    #     first deletes the entry and its directory so that the 
+    #     new one is correcly stored.
+    #     """
+    #     # First delete the key from the archive if it exist
+    #     from lib import archive
+    #     archive.index_delete(self.archive_index, self.key)
+    #     entrydir = self.archive_dir + archive.key2url(self.key)
+    #     if os.path.isdir(entrydir):
+    #         shutil.rmtree(entrydir)
 
-        # Then insert the new data
-        ar = archive.bucket(path=self.archive_dir,
-                            cwd=self.work_dir,
-                            key=self.key)
-        ar.cfg['meta']['public'] = self.cfg['meta']['public']
+    #     # Then insert the new data
+    #     ar = archive.bucket(path=self.archive_dir,
+    #                         cwd=self.work_dir,
+    #                         key=self.key)
+    #     ar.cfg['meta']['public'] = self.cfg['meta']['public']
 
-        def hook_index():
-            """
-            create an archive bucket
-            """
-            return archive.index_add(self.archive_index,
-                                     bucket=ar,
-                                     path=self.archive_dir)
-        ar.hook['post-save'] = hook_index
-        return ar
+    #     def hook_index():
+    #         """
+    #         create an archive bucket
+    #         """
+    #         return archive.index_add(self.archive_index,
+    #                                  bucket=ar,
+    #                                  path=self.archive_dir)
+    #     ar.hook['post-save'] = hook_index
+    #     return ar
