@@ -162,7 +162,6 @@ class app(base_app):
             ar.add_file("input_0.png", "original.png", info="uploaded")
             ar.add_file("output.txt", info="output.txt")
             ar.add_file("commands.txt", info="commands.txt")
-            ar.add_file(typeprimitive+"_out_input_0.png", info="output")
 
 
             ar.save()
