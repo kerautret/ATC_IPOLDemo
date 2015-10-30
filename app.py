@@ -1,4 +1,4 @@
-""""
+"""
 Demonstration of paper:  Adaptive Tangential Cover for Noisy Digital Contours
 demo editor: Bertrand Kerautret
 """
@@ -6,36 +6,32 @@ demo editor: Bertrand Kerautret
 from lib import base_app, build, http, image, config
 from lib.misc import app_expose, ctime
 from lib.base_app import init_app
+
 import cherrypy
 from cherrypy import TimeoutError
 import os.path
 import shutil
+import time
 
 class app(base_app):
     """ template demo app """
 
-    title = "Adaptive Tangential Cover for Noisy Digital Contours"
+    title = "Adaptive Tangential Cover for Noisy Digital Contours: Online Demonstration"
     xlink_article = 'http://www.ipol.im/'
-    xlink_src =  'http://dev.ipol.im/~kerautre/CodeExecutableDemos/' + \
-                 'FrechetAndConnectedCompDemo.tgz'
-    demo_src_filename  = 'FrechetAndConnectedCompDemo.tgz'
-    demo_src_dir  = 'ATC_IPOLDemo'
+    xlink_src = 'http://www.ipol.im/pub/pre/67/gjknd_1.1.tgz'
+    dgtal_src = 'https://github.com/kerautret/DGtal.git'
+    demo_src_filename  = 'gjknd_1.1.tgz'
+    demo_src_dir = 'ATC_IPOLDemo'
+
 
     input_nb = 1 # number of input images
-    input_max_pixels = 500000 # max size (in pixels) of an input image
-    input_max_weight = 1 * 2048 * 2048 # max size (in bytes) of an input file
+    input_max_pixels = 4096 * 4096 # max size (in pixels) of an input image
+    input_max_weight = 1 * 4096 * 4096 # max size (in bytes) of an input file
     input_dtype = '3x8i' # input image expected data type
     input_ext = '.png'   # input image expected extension (ie file format)
-    is_test = True       # switch to False for deployment
+    is_test = False       # switch to False for deployment
+    commands = []
     list_commands = ""
-
-    def input_select_callback(self, fnames):
-        '''
-        Implement the callback for the input select to
-        process the non-standard input
-        '''         
-        self.cfg.save()
-
 
     def __init__(self):
         """
@@ -54,14 +50,20 @@ class app(base_app):
         app_expose(base_app.params)
         # run() and result() must be defined here
 
+
+
+
+    
+
+
     def build(self):
         """
         program build/update
         """
-        # # store common file path in variables
+        # store common file path in variables
         # tgz_file = self.dl_dir + self.demo_src_filename
-        # prog_names = ["frechetSimplification"]
-        # script_names = ["convert.sh"]
+        # prog_names = ["dll_decomposition", "dll_sequence", "testBoundaries", \
+        # 			  "testDecomposition", "testOtsu"]
         # prog_bin_files = []
 
         # for f in prog_names:
@@ -69,8 +71,9 @@ class app(base_app):
 
         # log_file = self.base_dir + "build.log"
         # # get the latest source archive
+        # print ("Starting download \n")
         # build.download(self.xlink_src, tgz_file)
-
+        # print ("download ended... \n")
         # # test if the dest file is missing, or too old
         # if (os.path.isfile(prog_bin_files[0])
         #     and ctime(tgz_file) < ctime(prog_bin_files[0])):
@@ -80,45 +83,32 @@ class app(base_app):
         #     # extract the archive
         #     build.extract(tgz_file, self.src_dir)
         #     # build the program
-        #     os.mkdir(self.src_dir+ self.demo_src_dir+ "/build")
-        #     build.run("cd %s; cmake .. -DBUILD_EXAMPLES=false \
-        #         -DCMAKE_BUILD_TYPE=Release  \
-        #         -DDGTAL_BUILD_TESTING=false ; \
-        #         make -j 4" %(self.src_dir+ self.demo_src_dir + "/build"), \
-        #         stdout=log_file)
+        #     build.run("cd %s; git clone %s" %(self.src_dir) %("https://github.com/kerautret/DGtal.git"))
+        #     build.run("cd %s ; mkdir build; cmake .. -DCMAKE_BUILD_TYPE=Release; make -j 4" %(self.src_dir + "DGtal"))
+            
+        #     #build.run("mkdir %s;  " %(self.src_dir+"gjknd_1.1/build"), \
+        #    #            						 stdout=log_file)
+        #    # build.run("cd %s; cmake .. ; make -j 4" %(self.src_dir + \
+        #     #							"gjknd_1.1/build"),stdout=log_file)
 
         #     # save into bin dir
         #     if os.path.isdir(self.bin_dir):
         #         shutil.rmtree(self.bin_dir)
         #     os.mkdir(self.bin_dir)
         #     for i in range(0, len(prog_bin_files)) :
-        #         shutil.copy(self.src_dir +  os.path.join(self.demo_src_dir, \
-        #             "build", "demoIPOL_FrechetSimplification", prog_names[i]), \
-        #         prog_bin_files[i])
+        #         shutil.copy(self.src_dir + os.path.join("gjknd_1.1/build/src", \
+        #         			prog_names[i]), prog_bin_files[i])
 
-        #     # copy supplementary files from specific folders: "displayContours",
-        #     # "pgm2freeman"
-        #     shutil.copy(self.src_dir + self.demo_src_dir+\
-        #                 "/build/demoIPOL_ExtrConnectedReg/pgm2freeman", \
-        #       self.bin_dir+"pgm2freeman")
-        #     shutil.copy(self.src_dir + self.demo_src_dir+ \
-        #                 "/build/demoIPOL_ExtrConnectedReg/displayContours", \
-        #                  self.bin_dir+"displayContours")
-
-        #     # copy script files
-        #     for f in script_names :
-        #         shutil.copy(self.src_dir + os.path.join(self.demo_src_dir, \
-        #          "demoIPOL_FrechetSimplification", f), self.bin_dir)
-        #     # copy Dynamic lib
-        #     shutil.copy(self.src_dir +self.demo_src_dir+ \
-        #         "/build/src/libDGtal.so", self.bin_dir)
-        #     shutil.copy(self.src_dir +self.demo_src_dir+ \
-        #         "/build/src/libDGtalIO.so", self.bin_dir)
         #     # cleanup the source dir
         #     shutil.rmtree(self.src_dir)
 
-
         return
+
+
+
+
+   
+
 
 
     @cherrypy.expose
@@ -127,18 +117,18 @@ class app(base_app):
         """
         params handling and run redirection
         """
-        
+
         # save and validate the parameters
         try:
-            self.cfg['param']['tmin'] =  float(kwargs['tmin'])
-            self.cfg['param']['tmax'] =  float(kwargs['tmax'])
-            self.cfg['param']['m'] =  float(kwargs['m'])
+            self.cfg['param']['m'] = kwargs['m']
+            self.cfg['param']['tmin'] = kwargs['tmin']
+            self.cfg['param']['tmax'] = kwargs['tmax']
             self.cfg['param']['autothreshold'] =  kwargs['thresholdtype'] == 'True'
+
             self.cfg.save()
         except ValueError:
             return self.error(errcode='badparams',
                               errmsg="The parameters must be numeric.")
-
 
         http.refresh(self.base_url + 'run?key=%s' % self.key)
         return self.tmpl_out("wait.html")
@@ -149,20 +139,20 @@ class app(base_app):
         """
         algo execution
         """
-
-        # run the algorithm
         self.list_commands = ""
 
+
         try:
-            self.run_algo({})
+            self.run_algo(self)
         except TimeoutError:
             return self.error(errcode='timeout')
         except RuntimeError:
-            return self.error(errcode='runtime')
+            return self.error(errcode='runtime',
+                              errmsg="Something went wrong with the program.")
         except ValueError:
             return self.error(errcode='badparams',
                               errmsg="The parameters given produce no contours,\
-                                      please change them.")
+                              		  please change them.")
 
         http.redir_303(self.base_url + 'result?key=%s' % self.key)
 
@@ -170,15 +160,19 @@ class app(base_app):
         if self.cfg['meta']['original']:
             ar = self.make_archive()
             ar.add_file("input_0.png", "original.png", info="uploaded")
-            ar.add_file("output.png", info="result.png")
-            ar.add_file("commands.txt", info="commands")
-            ar.add_file("inputPolygon.txt", info="input polygons")
-            ar.add_file("outputPolygon.txt", info="output polygons")
-            ar.add_info({"tmin": self.cfg['param']['tmin'],
-                         "tmax": self.cfg['param']['tmax'], "m": m})
+            ar.add_file("algoLog.txt", info="algoLog.txt")
+            ar.add_file("commands.txt", info="commands.txt")
+            ar.add_file("outputATC.png", "outputATC.png", info="outputATC.png")
+            ar.add_file("outputPolygon.png", "outputPolygon.png", info="outputPolygon.png")
+            ar.add_info({"version": self.cfg['param']["version"]})
             ar.save()
 
         return self.tmpl_out("run.html")
+
+
+
+
+
 
     def run_algo(self, params):
         """
@@ -200,7 +194,7 @@ class app(base_app):
         fInfo = open(self.work_dir+"algoLog.txt", "w")
         command_args = ['img2freeman']+\
                        ['--minSize', str(self.cfg['param']['m'])]+\
-                       [ '-i', 'inputNG.pgm']
+                       ['--sort', '-i', 'inputNG.pgm']
                        
         if not self.cfg['param']['autothreshold']:
             command_args += ['-M', str(self.cfg['param']['tmax'])]+ \
@@ -220,22 +214,23 @@ class app(base_app):
             line_cases = lines[0].replace(")", " ").split()
             self.cfg['param']['tmax'] = int(line_cases[17])
 
-        contoursList = open (self.work_dir+"tmp.dat", "w")
-        contoursList.write("# Polygon contour obtained from the pgm2freeman"+\
-                           " program with the following options: \n"+\
-                           "# "+ cmd + "\n"+\
-                           "# Each line corresponds to an resulting polygon. "+\
-                           "All vertices (xi yi) are given in the same line: "+\
-                           " x0 y0 x1 y1 ... xn yn \n")
-        index = 0
-        f.close()
+        singleContour = open(self.work_dir+"singleContour.fc", 'w')
         f = open(self.work_dir+"inputPolygon.txt", "r")
         line = f.read()
-        contoursList.write(line+"\n")
+        singleContour.write(line+"\n")
+        singleContour.close()
         
-        contoursList.close()
+        f = open(self.work_dir+"inputPolygon.sdp", "w")
+        fInfo = open(self.work_dir+"algoLog.txt", "a")
+        command_args = ['freeman2sdp']+\
+                       ['-f', 'singleContour.fc']
+                       
+        
+        cmd = self.runCommand(command_args, f, fInfo, \
+                              comp = ' > inputPolygon.sdp')
+
         f.close()
-        shutil.copy(self.work_dir+'tmp.dat', self.work_dir+'inputPolygon.txt')
+        fInfo.close()
 
 
         ##  -------
@@ -243,21 +238,45 @@ class app(base_app):
         ## ---------
         inputWidth = image(self.work_dir + 'input_0.png').size[0]
         inputHeight = image(self.work_dir + 'input_0.png').size[1]
-        command_args = ['testCircleDecomposition'] + \
-                       [ '-i', 'inputPolygon.txt', '-d', self.src_dir + os.path.join(ImaGene-forIPOL)] + \
-                       ['-e']
+        command_args = ['testMultiScaleDominantPoint'] + \
+                       [ '-i', 'inputPolygon.sdp', '-d', self.base_dir + \
+                         os.path.join('srcManual/') + os.path.join('ImaGene-forIPOL')] + \
+                       ['-e'] + ['--sourceImageWidth', str(inputWidth)]+ \
+                       ['--sourceImageHeight', str(inputHeight)]
         f = open(self.work_dir+"algoLog.txt", "a")
-        cmd = self.runCommand(command_args)
-       
+        cmd = self.runCommand(command_args, None, f)
+        f.close()
 
 
         ## ---------
         ## process 4: converting to output result
         ## ---------
+        fInfo = open(self.work_dir+"algoLog.txt", "a")
         command_args = ['convert.sh', '-background', '#FFFFFF', '-flatten', \
-                        'output.eps', 'output.png']
-        self.runCommand(command_args)
+                        'inputPolygonATC_Step4.eps', 'outputATC.png']
+        self.runCommand(command_args, None, fInfo)
+        shutil.copy(self.work_dir + os.path.join("inputPolygonATC_Step4.eps"), 
+                    self.work_dir + os.path.join("outputATC.eps"))
+        ## ---------
+        fInfo = open(self.work_dir+"algoLog.txt", "a")
+        command_args = ['convert.sh', '-background', '#FFFFFF', '-flatten', \
+                        'inputPolygon_DPnew.eps', 'outputPolygon.png']
+        shutil.copy(self.work_dir + os.path.join("inputPolygon_DPnew.eps"), 
+                    self.work_dir + os.path.join("outputPolygon.eps"))
 
+        self.runCommand(command_args, None, fInfo)
+        fInfo.close()
+        
+        ## ------
+        # Save version num:
+        fVersion = open(self.work_dir+"version.txt", "w")
+        command_args = ['testMultiScaleDominantPoint', '--version']
+        self.runCommand(command_args, None, fVersion)
+        fVersion.close()
+        f = open(self.work_dir+"version.txt", "r")
+        self.cfg['param']['version'] = f.read()
+        self.cfg.save()
+        
         ## ----
         ## Final step: save command line
         ## ----
@@ -265,6 +284,9 @@ class app(base_app):
         f.write(self.list_commands)
         f.close()
         return
+
+
+
 
     @cherrypy.expose
     @init_app
@@ -299,32 +321,4 @@ class app(base_app):
         self.list_commands +=  command_to_save + '\n'
         return command_to_save
 
-    def make_archive(self):
-        """
-        create an archive bucket HACK!
-        This overloaded verion of the empty_app function
-        first deletes the entry and its directory so that the 
-        new one is correcly stored.
-        """
-        # First delete the key from the archive if it exist
-        from lib import archive
-        archive.index_delete(self.archive_index, self.key)
-        entrydir = self.archive_dir + archive.key2url(self.key)
-        if os.path.isdir(entrydir):
-            shutil.rmtree(entrydir)
-
-        # Then insert the new data
-        ar = archive.bucket(path=self.archive_dir,
-                            cwd=self.work_dir,
-                            key=self.key)
-        ar.cfg['meta']['public'] = self.cfg['meta']['public']
-
-        def hook_index():
-            """
-            create an archive bucket
-            """
-            return archive.index_add(self.archive_index,
-                                     bucket=ar,
-                                     path=self.archive_dir)
-        ar.hook['post-save'] = hook_index
-        return ar
+  

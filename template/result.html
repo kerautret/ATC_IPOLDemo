@@ -1,6 +1,6 @@
 <%include file="header.html" />
 
-<p> The input contours of the algorithm were obtained using the <i>pgm2freeman</i> command with following parameters:
+<p> The input contours of the algorithm were obtained using the <i>img2freeman</i> command with following parameters:
 
 <ul>
 
@@ -17,8 +17,6 @@
 <p> The main algorithm was applied with the following parameters:
 <ul>
 
-<li>  maximal error <font color=red><i>e</i></font>: ${app.cfg['param']['e']}  </li>
-<li>  use only width <font color=red><i>w</i></font>: ${app.cfg['param']['w']}  </li>
 </ul>
 </p>
 
@@ -47,7 +45,7 @@
 
 <h2>Result</h2>
 
-<p>You can download the result in <a href="${app.work_url+'output.eps'}">eps</a> format, or download the  <a href="${app.work_url+'inputPolygon.txt'}">input </a> and <a href="${app.work_url+'outputPolygon.txt'}">output</a>  polygons.</p>
+<p>You can download the resulting ATC in  <a href="${app.work_url+'outputATC.eps'}">eps</a> format, or download the  <a href="${app.work_url+'inputPolygon.sdp'}">input </a> with the resulting polygon in <a href="${app.work_url+'outputPolygon.eps'}">eps</a>  format </p>
 
 
 <div class="gallery" style="height:${height}px">
@@ -60,9 +58,16 @@
       </a>
     </li>
     <li>
-      <a href="${app.work_url+'output.png'}">output.png
+      <a href="${app.work_url+'outputATC.png'}">outputATC.png
 	<span>
-	  <img  height="${height}" src="${app.work_url + 'output.png'}" alt="output" />
+	  <img  height="${height}" src="${app.work_url + 'outputATC.png'}" alt="output ATC" />
+	</span>
+      </a>
+    </li>
+    <li>
+      <a href="${app.work_url+'outputPolygon.png'}">outputPolygon.png
+	<span>
+	  <img  height="${height}" src="${app.work_url + 'outputPolygon.png'}" alt="output polygon" />
 	</span>
       </a>
     </li>
