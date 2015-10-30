@@ -164,6 +164,7 @@ class app(base_app):
             ar.add_file("commands.txt", info="commands.txt")
             ar.add_file("outputATC.png", "outputATC.png", info="outputATC.png")
             ar.add_file("outputPolygon.png", "outputPolygon.png", info="outputPolygon.png")
+            ar.add_info({"version": self.cfg['param']["version"]})
             ar.save()
 
         return self.tmpl_out("run.html")
@@ -264,8 +265,18 @@ class app(base_app):
                     self.work_dir + os.path.join("outputPolygon.eps"))
 
         self.runCommand(command_args, None, fInfo)
-
-
+        fInfo.close()
+        
+        ## ------
+        # Save version num:
+        fVersion = open(self.work_dir+"version.txt", "w")
+        command_args = ['testMultiScaleDominantPoint', '--version']
+        self.runCommand(command_args, None, fVersion)
+        fVersion.close()
+        f = open(self.work_dir+"version.txt", "w")
+        self.cfg['param']['version'] = f.read()
+        self.cfg.save()
+        
         ## ----
         ## Final step: save command line
         ## ----
