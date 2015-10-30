@@ -273,7 +273,7 @@ class app(base_app):
         command_args = ['testMultiScaleDominantPoint', '--version']
         self.runCommand(command_args, None, fVersion)
         fVersion.close()
-        f = open(self.work_dir+"version.txt", "w")
+        f = open(self.work_dir+"version.txt", "r")
         self.cfg['param']['version'] = f.read()
         self.cfg.save()
         
