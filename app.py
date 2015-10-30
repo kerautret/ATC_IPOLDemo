@@ -254,10 +254,15 @@ class app(base_app):
         command_args = ['convert.sh', '-background', '#FFFFFF', '-flatten', \
                         'inputPolygonATC_Step4.eps', 'outputATC.png']
         self.runCommand(command_args, None, fInfo)
+        shutil.copy(self.work_dir + os.path.join("inputPolygonATC_Step4.eps"), 
+                    self.work_dir + os.path.join("outputATC.eps"))
         ## ---------
         fInfo = open(self.work_dir+"algoLog.txt", "a")
         command_args = ['convert.sh', '-background', '#FFFFFF', '-flatten', \
                         'inputPolygon_DPnew.eps', 'outputPolygon.png']
+        shutil.copy(self.work_dir + os.path.join("inputPolygon_DPnew.eps"), 
+                    self.work_dir + os.path.join("outputPolygon.eps"))
+
         self.runCommand(command_args, None, fInfo)
 
 
@@ -305,32 +310,4 @@ class app(base_app):
         self.list_commands +=  command_to_save + '\n'
         return command_to_save
 
-    # def make_archive(self):
-    #     """
-    #     create an archive bucket HACK!
-    #     This overloaded verion of the empty_app function
-    #     first deletes the entry and its directory so that the 
-    #     new one is correcly stored.
-    #     """
-    #     # First delete the key from the archive if it exist
-    #     from lib import archive
-    #     archive.index_delete(self.archive_index, self.key)
-    #     entrydir = self.archive_dir + archive.key2url(self.key)
-    #     if os.path.isdir(entrydir):
-    #         shutil.rmtree(entrydir)
-
-    #     # Then insert the new data
-    #     ar = archive.bucket(path=self.archive_dir,
-    #                         cwd=self.work_dir,
-    #                         key=self.key)
-    #     ar.cfg['meta']['public'] = self.cfg['meta']['public']
-
-    #     def hook_index():
-    #         """
-    #         create an archive bucket
-    #         """
-    #         return archive.index_add(self.archive_index,
-    #                                  bucket=ar,
-    #                                  path=self.archive_dir)
-    #     ar.hook['post-save'] = hook_index
-    #     return ar
+  
