@@ -251,16 +251,17 @@ class app(base_app):
         ## ---------
         ## process 4: converting to output result
         ## ---------
+        widthDisplay = max(inputWidth, 512)
         fInfo = open(self.work_dir+"algoLog.txt", "a")
         command_args = ['convert.sh', '-background', '#FFFFFF', '-flatten', \
-                        'inputPolygonATC_Step4.eps', '-geometry', str(inputWidth)+"x"+str(inputHeight), 'outputATC.png']
+                        'inputPolygonATC_Step4.eps', '-geometry', str(widthDisplay)+"x, 'outputATC.png']
         self.runCommand(command_args, None, fInfo)
         shutil.copy(self.work_dir + os.path.join("inputPolygonATC_Step4.eps"), 
                     self.work_dir + os.path.join("outputATC.eps"))
         ## ---------
         fInfo = open(self.work_dir+"algoLog.txt", "a")
         command_args = ['convert.sh', '-background', '#FFFFFF', '-flatten', \
-                        'inputPolygon_DPnew.eps', 'outputPolygon.png']
+                        'inputPolygon_DPnew.eps', 'outputPolygon.png',  '-geometry', str(widthDisplay)+"x"]
         shutil.copy(self.work_dir + os.path.join("inputPolygon_DPnew.eps"), 
                     self.work_dir + os.path.join("outputPolygon.eps"))
 
