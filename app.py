@@ -261,7 +261,7 @@ class app(base_app):
         ## ---------
         fInfo = open(self.work_dir+"algoLog.txt", "a")
         command_args = ['convert.sh', '-background', '#FFFFFF', '-flatten', \
-                        'inputPolygon_DPnew.eps', 'outputPolygon.png',  '-geometry', str(widthDisplay)+"x"]
+                        'inputPolygon_DPnew.eps','-geometry', str(widthDisplay)+"x", 'outputPolygon.png']
         shutil.copy(self.work_dir + os.path.join("inputPolygon_DPnew.eps"), 
                     self.work_dir + os.path.join("outputPolygon.eps"))
 
